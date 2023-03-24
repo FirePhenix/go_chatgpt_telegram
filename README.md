@@ -21,7 +21,6 @@ This is a simple Telegram chatbot that uses the OpenAI GPT-3.5-turbo model to ge
 Users can interact with the chatbot in Telegram, sending messages and receiving GPT-3.5-turbo-generated replies. The chatbot also supports the following commands:
 
 - `/new`: Starts a new conversation, clearing the previous message history for the user.
-- `/history`: Currently not implemented.
 
 ### Data Structures
 
