@@ -14,7 +14,7 @@ This is a simple Telegram chatbot that uses the OpenAI GPT-3.5-turbo model to ge
 1. Clone the repository
 2. Install dependencies with `go mod tidy`
 3. Set the environment variables `TELEGRAM_TOKEN` and `OPENAI_KEY`
-4. Run the project with `go run main.go`
+4. Run the project with `go run .`
 
 ### Usage
 
