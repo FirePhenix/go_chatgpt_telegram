@@ -49,14 +49,6 @@ func InitDB() {
 	if err != nil {
 		panic(err)
 	}
-	// defer func() {
-	// 	if err = client.Disconnect(context.TODO()); err != nil {
-	// 		panic(err)
-	// 	}
-	// }()
-
-	//check if document exists by user_id
-	// collection := client.Database("go_chatgpt_telegram").Collection("messages")
 }
 
 func getMessagesByUserID(userID int64) []Message {
