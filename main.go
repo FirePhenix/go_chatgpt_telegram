@@ -15,19 +15,15 @@ const (
 	BASEURL = "https://api.openai.com/v1"
 )
 
-var messages []Message
-var usersMessage map[int64][]Message
-
 // need set messages to the users'id
 func main() {
 	// set log flags
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	InitDB()
 	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_TOKEN"))
 	if err != nil {
 		panic(err)
 	}
-	messages = make([]Message, 0)
-	usersMessage = make(map[int64][]Message)
 	bot.Debug = true
 	updateConfig := tgbotapi.NewUpdate(0)
 	updateConfig.Timeout = 60
@@ -40,15 +36,12 @@ func main() {
 	}
 }
 
-func addMessageToHistory(message Message, userID int64) {
-	messages = usersMessage[userID]
-	messages = append(messages, message)
-	usersMessage[userID] = messages
+func addMessageToHistory(message Message) {
+	writeMessageToDB(message)
 }
 
 func clearUserChatHistory(userID int64) {
-	messages = make([]Message, 0)
-	usersMessage[userID] = messages
+	removeMessagesByUserID(userID)
 }
 
 func handleUpdate(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
@@ -69,20 +62,22 @@ func handleUpdate(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	}
 	typingAction := tgbotapi.NewChatAction(chatID, "typing")
 	_, _ = bot.Send(typingAction)
-	// add user's message to history
 	message := Message{
 		Role:    "user",
 		Content: text,
+		UserID:  userID,
 	}
-	addMessageToHistory(message, userID)
+	addMessageToHistory(message)
+	messages := getMessagesByUserID(userID)
+	log.Println(messages)
 	response := sendMsgToChatGpt(messages)
 	// add assistant's message to history
 	message = Message{
 		Role:    "assistant",
 		Content: response,
+		UserID:  userID,
 	}
-	addMessageToHistory(message, userID)
-	log.Println(usersMessage)
+	addMessageToHistory(message)
 	replyMsg.Text = response
 	_, _ = bot.Send(replyMsg)
 }
