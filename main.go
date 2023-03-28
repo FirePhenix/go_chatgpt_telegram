@@ -2,11 +2,14 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
@@ -34,6 +37,16 @@ func main() {
 		}
 		go handleUpdate(bot, update)
 	}
+	s := make(chan os.Signal, 1)
+	signal.Notify(s, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-s
+		if err = client.Disconnect(context.TODO()); err != nil {
+			log.Println(err)
+		}
+		log.Printf("Exiting...\n")
+		os.Exit(0)
+	}()
 }
 
 func addMessageToHistory(message Message) {
