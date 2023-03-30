@@ -25,7 +25,7 @@ func main() {
 	InitDB()
 	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_TOKEN"))
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	bot.Debug = true
 	updateConfig := tgbotapi.NewUpdate(0)
@@ -42,7 +42,7 @@ func main() {
 	go func() {
 		<-s
 		if err = client.Disconnect(context.TODO()); err != nil {
-			log.Println(err)
+			log.Fatal(err)
 		}
 		log.Printf("Exiting...\n")
 		os.Exit(0)
@@ -82,7 +82,6 @@ func handleUpdate(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	}
 	addMessageToHistory(message)
 	messages := getMessagesByUserID(userID)
-	log.Println(messages)
 	response := sendMsgToChatGpt(messages)
 	// add assistant's message to history
 	message = Message{
@@ -108,19 +107,17 @@ func sendMsgToChatGpt(messages []Message) string {
 	req.Header.Set("Authorization", "Bearer "+os.Getenv("OPENAI_KEY"))
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Println(err)
-		panic(err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 	response, err := io.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	log.Println(string(response))
 	var chatResponse ChatResponse
 	err = json.Unmarshal(response, &chatResponse)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	content := chatResponse.Choices[0].Message.Content
 
