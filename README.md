@@ -30,3 +30,12 @@ Users can interact with the chatbot in Telegram, sending messages and receiving 
 ### Note
 
 This is a basic implementation of a Telegram chatbot using the GPT-3.5-turbo API. 
+
+### Todo list
+
+- [ ] stream support
+- [ ] voice message support
+- [ ] Capability to receive and read text files
+- [ ] GPT-4
+
+
