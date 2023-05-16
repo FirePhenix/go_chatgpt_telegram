@@ -36,7 +36,7 @@ for support voice message, you need to install fmmpeg library.
 ### Todo list
 
 - [ ] stream support
-- [-] voice message support
+- [x] voice message support
 - [ ] Capability to receive and read text files
 - [ ] GPT-4
 
