@@ -31,10 +31,12 @@ Users can interact with the chatbot in Telegram, sending messages and receiving 
 
 This is a basic implementation of a Telegram chatbot using the GPT-3.5-turbo API. 
 
+for support voice message, you need to install fmmpeg library.
+
 ### Todo list
 
 - [ ] stream support
-- [ ] voice message support
+- [-] voice message support
 - [ ] Capability to receive and read text files
 - [ ] GPT-4
 
