@@ -41,6 +41,9 @@ var client *mongo.Client
 func InitDB() {
 	// set up mongodb
 	uri := os.Getenv("MONGODB_URI")
+	if uri == "" {
+		log.Fatal("MONGODB_URI is not set")
+	}
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(uri).SetServerAPIOptions(serverAPI)
 	var err error
